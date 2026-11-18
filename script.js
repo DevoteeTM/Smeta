@@ -122,6 +122,7 @@ function restoreDraft() {
     row.querySelector(".item-unit").value = ["шт", "час", "услуга"].includes(position.unit)
       ? position.unit
       : "шт";
+    updateDuplicateButton(row);
   });
 
   return true;
@@ -289,6 +290,7 @@ function addPosition(shouldFocus = false, shouldSave = true) {
   const fragment = positionTemplate.content.cloneNode(true);
   const row = fragment.querySelector("tr");
   positionsBody.append(fragment);
+  updateDuplicateButton(row);
 
   if (shouldFocus) {
     row.querySelector(".item-name").focus();
@@ -304,16 +306,56 @@ function clearRow(row) {
   row.querySelector(".item-quantity").value = "";
   row.querySelector(".item-unit").value = "шт";
   row.querySelector(".item-price").value = "";
+  updateDuplicateButton(row);
   row.querySelector(".item-name").focus();
 }
 
+function isPositionEmpty(row) {
+  return !row.querySelector(".item-name").value.trim()
+    && !row.querySelector(".item-quantity").value.trim()
+    && !row.querySelector(".item-price").value.trim();
+}
+
+function updateDuplicateButton(row) {
+  row.querySelector(".duplicate-button").disabled = isPositionEmpty(row);
+}
+
+function duplicatePosition(sourceRow) {
+  if (isPositionEmpty(sourceRow)) {
+    return;
+  }
+
+  const fragment = positionTemplate.content.cloneNode(true);
+  const duplicatedRow = fragment.querySelector("tr");
+  duplicatedRow.querySelector(".item-name").value = sourceRow.querySelector(".item-name").value;
+  duplicatedRow.querySelector(".item-quantity").value = sourceRow.querySelector(".item-quantity").value;
+  duplicatedRow.querySelector(".item-unit").value = sourceRow.querySelector(".item-unit").value;
+  duplicatedRow.querySelector(".item-price").value = sourceRow.querySelector(".item-price").value;
+  sourceRow.after(fragment);
+  updateDuplicateButton(duplicatedRow);
+  updateTotals();
+  saveDraft();
+  duplicatedRow.querySelector(".item-name").focus();
+}
+
 positionsBody.addEventListener("input", (event) => {
+  if (event.target.matches(".item-name, .item-quantity, .item-price")) {
+    updateDuplicateButton(event.target.closest("tr"));
+  }
+
   if (event.target.matches(".item-quantity, .item-price")) {
     updateTotals();
   }
 });
 
 positionsBody.addEventListener("click", (event) => {
+  const duplicateButton = event.target.closest(".duplicate-button");
+
+  if (duplicateButton) {
+    duplicatePosition(duplicateButton.closest("tr"));
+    return;
+  }
+
   const removeButton = event.target.closest(".remove-button");
 
   if (!removeButton) {

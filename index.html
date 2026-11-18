@@ -47,7 +47,7 @@
                 <th scope="col">Единица</th>
                 <th scope="col">Цена</th>
                 <th scope="col">Сумма</th>
-                <th scope="col"><span class="visually-hidden">Удалить</span></th>
+                <th scope="col"><span class="visually-hidden">Действия</span></th>
               </tr>
             </thead>
             <tbody id="positions-body"></tbody>
@@ -139,8 +139,13 @@
         <td class="line-total-cell" data-label="Сумма">
           <output class="line-total">0 ₸</output>
         </td>
-        <td class="remove-cell" data-label="Удалить">
-          <button class="remove-button" type="button" aria-label="Удалить позицию" title="Удалить позицию">×</button>
+        <td class="row-actions-cell" data-label="Действия">
+          <div class="row-actions">
+            <button class="duplicate-button" type="button" aria-label="Дублировать позицию" title="Дублировать позицию" disabled>
+              <span aria-hidden="true">⧉</span>
+            </button>
+            <button class="remove-button" type="button" aria-label="Удалить позицию" title="Удалить позицию">×</button>
+          </div>
         </td>
       </tr>
     </template>
