@@ -3,6 +3,16 @@ const positionTemplate = document.querySelector("#position-template");
 const addPositionButton = document.querySelector("#add-position");
 const grandTotal = document.querySelector("#grand-total");
 const estimateDate = document.querySelector("#estimate-date");
+const discountRate = document.querySelector("#discount-rate");
+const vatRate = document.querySelector("#vat-rate");
+const currency = document.querySelector("#currency");
+const subtotal = document.querySelector("#subtotal");
+const discountRow = document.querySelector("#discount-row");
+const discountAmount = document.querySelector("#discount-amount");
+const discountedRow = document.querySelector("#discounted-row");
+const discountedTotal = document.querySelector("#discounted-total");
+const vatRow = document.querySelector("#vat-row");
+const vatAmount = document.querySelector("#vat-amount");
 
 function getLocalDate() {
   const today = new Date();
@@ -27,28 +37,42 @@ function toNumber(value) {
 }
 
 function formatMoney(value) {
-  const safeValue = Number.isFinite(value) ? value : 0;
+  const safeValue = Number.isFinite(value) ? Math.round(value) : 0;
   const formatted = new Intl.NumberFormat("ru-RU", {
-    maximumFractionDigits: 2
+    maximumFractionDigits: 0
   }).format(safeValue);
 
-  return `${formatted.replace(/[\u00a0\u202f]/g, " ")} ₸`;
+  return `${formatted.replace(/[\u00a0\u202f]/g, " ")} ${currency.value}`;
 }
 
 function updateTotals() {
-  let total = 0;
+  let positionsTotal = 0;
 
   positionsBody.querySelectorAll("tr").forEach((row) => {
     const quantity = toNumber(row.querySelector(".item-quantity").value);
     const price = toNumber(row.querySelector(".item-price").value);
-    const lineSum = quantity * price;
+    const lineSum = Math.round(quantity * price);
     const safeLineSum = Number.isFinite(lineSum) ? lineSum : 0;
 
     row.querySelector(".line-total").textContent = formatMoney(safeLineSum);
-    total += safeLineSum;
+    positionsTotal += safeLineSum;
   });
 
+  const discount = Math.round(positionsTotal * toNumber(discountRate.value) / 100);
+  const afterDiscount = positionsTotal - discount;
+  const vat = Math.round(afterDiscount * toNumber(vatRate.value) / 100);
+  const total = afterDiscount + vat;
+
+  subtotal.textContent = formatMoney(positionsTotal);
+  discountAmount.textContent = formatMoney(-discount);
+  discountedTotal.textContent = formatMoney(afterDiscount);
+  vatAmount.textContent = formatMoney(vat);
   grandTotal.textContent = formatMoney(total);
+
+  const hasDiscount = discount !== 0;
+  discountRow.hidden = !hasDiscount;
+  discountedRow.hidden = !hasDiscount;
+  vatRow.hidden = vat === 0;
 }
 
 function addPosition(shouldFocus = false) {
@@ -107,6 +131,9 @@ positionsBody.addEventListener("keydown", (event) => {
 });
 
 addPositionButton.addEventListener("click", () => addPosition(true));
+discountRate.addEventListener("input", updateTotals);
+vatRate.addEventListener("input", updateTotals);
+currency.addEventListener("change", updateTotals);
 
 estimateDate.value = getLocalDate();
 addPosition();
