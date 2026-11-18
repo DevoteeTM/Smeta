@@ -18,6 +18,15 @@ const printEstimateNumber = document.querySelector("#print-estimate-number");
 const printEstimateDate = document.querySelector("#print-estimate-date");
 const comment = document.querySelector("#comment");
 const printEstimateButton = document.querySelector("#print-estimate");
+const copyWhatsAppButton = document.querySelector("#copy-whatsapp");
+const newEstimateButton = document.querySelector("#new-estimate");
+const copyStatus = document.querySelector("#copy-status");
+const copyFallback = document.querySelector("#copy-fallback");
+const copyText = document.querySelector("#copy-text");
+const sender = document.querySelector("[name='sender']");
+const customer = document.querySelector("[name='customer']");
+const draftStorageKey = "estimate-draft-v1";
+let copyStatusTimer;
 
 function getLocalDate() {
   const today = new Date();
@@ -45,6 +54,182 @@ function updatePrintHeading() {
 function resizeComment() {
   comment.style.height = "auto";
   comment.style.height = `${comment.scrollHeight}px`;
+}
+
+function getPositionsData() {
+  return Array.from(positionsBody.querySelectorAll("tr"), (row) => ({
+    name: row.querySelector(".item-name").value,
+    quantity: row.querySelector(".item-quantity").value,
+    unit: row.querySelector(".item-unit").value,
+    price: row.querySelector(".item-price").value
+  }));
+}
+
+function saveDraft() {
+  const draft = {
+    sender: sender.value,
+    customer: customer.value,
+    estimateNumber: estimateNumber.value,
+    date: estimateDate.value,
+    positions: getPositionsData(),
+    discountRate: discountRate.value,
+    vatRate: vatRate.value,
+    currency: currency.value,
+    comment: comment.value
+  };
+
+  try {
+    localStorage.setItem(draftStorageKey, JSON.stringify(draft));
+  } catch (error) {
+    // Смета продолжает работать, даже если хранилище браузера недоступно.
+  }
+}
+
+function restoreDraft() {
+  let draft;
+
+  try {
+    draft = JSON.parse(localStorage.getItem(draftStorageKey));
+  } catch (error) {
+    return false;
+  }
+
+  if (!draft || typeof draft !== "object") {
+    return false;
+  }
+
+  sender.value = typeof draft.sender === "string" ? draft.sender : "";
+  customer.value = typeof draft.customer === "string" ? draft.customer : "";
+  estimateNumber.value = typeof draft.estimateNumber === "string" ? draft.estimateNumber : "";
+  estimateDate.value = typeof draft.date === "string" ? draft.date : getLocalDate();
+  discountRate.value = typeof draft.discountRate === "string" ? draft.discountRate : "0";
+  vatRate.value = typeof draft.vatRate === "string" ? draft.vatRate : "0";
+  currency.value = ["₸", "₽", "$", "€"].includes(draft.currency) ? draft.currency : "₸";
+  comment.value = typeof draft.comment === "string" ? draft.comment : "";
+  positionsBody.replaceChildren();
+
+  const savedPositions = Array.isArray(draft.positions) && draft.positions.length > 0
+    ? draft.positions
+    : [{}];
+
+  savedPositions.forEach((savedPosition) => {
+    const position = savedPosition && typeof savedPosition === "object" ? savedPosition : {};
+    addPosition(false, false);
+    const row = positionsBody.lastElementChild;
+    row.querySelector(".item-name").value = typeof position.name === "string" ? position.name : "";
+    row.querySelector(".item-quantity").value = typeof position.quantity === "string" ? position.quantity : "";
+    row.querySelector(".item-price").value = typeof position.price === "string" ? position.price : "";
+    row.querySelector(".item-unit").value = ["шт", "час", "услуга"].includes(position.unit)
+      ? position.unit
+      : "шт";
+  });
+
+  return true;
+}
+
+function incrementEstimateNumber(value) {
+  const trimmedValue = value.trim();
+  const currentNumber = /^\d+$/.test(trimmedValue) ? Number(trimmedValue) : 0;
+  const nextNumber = Number.isSafeInteger(currentNumber) ? currentNumber + 1 : 1;
+  return String(nextNumber).padStart(trimmedValue.length, "0");
+}
+
+function startNewEstimate() {
+  if (!window.confirm("Создать новую смету? Текущий черновик будет очищен.")) {
+    return;
+  }
+
+  const nextEstimateNumber = incrementEstimateNumber(estimateNumber.value);
+  sender.value = "";
+  customer.value = "";
+  estimateNumber.value = nextEstimateNumber;
+  estimateDate.value = getLocalDate();
+  discountRate.value = "0";
+  vatRate.value = "0";
+  currency.value = "₸";
+  comment.value = "";
+  positionsBody.replaceChildren();
+  addPosition(false, false);
+  window.clearTimeout(copyStatusTimer);
+  copyStatus.hidden = true;
+  copyFallback.hidden = true;
+  updateTotals();
+  updatePrintHeading();
+  resizeComment();
+  saveDraft();
+  positionsBody.querySelector(".item-name").focus();
+}
+
+function formatQuantity(value) {
+  return new Intl.NumberFormat("ru-RU", {
+    maximumFractionDigits: 2
+  }).format(toNumber(value)).replace(/[\u00a0\u202f]/g, " ");
+}
+
+function createWhatsAppText() {
+  const lines = [
+    `Смета № ${estimateNumber.value.trim() || "—"} от ${formatDateForPrint(estimateDate.value)}`
+  ];
+
+  positionsBody.querySelectorAll("tr").forEach((row) => {
+    const name = row.querySelector(".item-name").value.trim();
+    const quantityValue = row.querySelector(".item-quantity").value;
+    const priceValue = row.querySelector(".item-price").value;
+
+    if (!name && !quantityValue.trim() && !priceValue.trim()) {
+      return;
+    }
+
+    const quantity = formatQuantity(quantityValue);
+    const unit = row.querySelector(".item-unit").value;
+    const price = formatMoney(toNumber(priceValue));
+    const lineTotal = row.querySelector(".line-total").textContent;
+    lines.push(`• ${name || "Без названия"} — ${quantity} ${unit} × ${price} = ${lineTotal}`);
+  });
+
+  if (!discountRow.hidden) {
+    lines.push(`Скидка ${formatQuantity(discountRate.value)}%: ${discountAmount.textContent}`);
+  }
+
+  if (!vatRow.hidden) {
+    lines.push(`НДС ${formatQuantity(vatRate.value)}%: ${vatAmount.textContent}`);
+  }
+
+  lines.push(`Итого к оплате: ${grandTotal.textContent}`);
+  return lines.join("\n");
+}
+
+function showCopySuccess() {
+  copyFallback.hidden = true;
+  copyStatus.hidden = false;
+  window.clearTimeout(copyStatusTimer);
+  copyStatusTimer = window.setTimeout(() => {
+    copyStatus.hidden = true;
+  }, 2000);
+}
+
+function showCopyFallback(text) {
+  window.clearTimeout(copyStatusTimer);
+  copyStatus.hidden = true;
+  copyText.value = text;
+  copyFallback.hidden = false;
+  copyText.focus();
+  copyText.select();
+}
+
+async function copyForWhatsApp() {
+  const text = createWhatsAppText();
+
+  try {
+    if (!navigator.clipboard || !window.isSecureContext) {
+      throw new Error("Clipboard API is unavailable");
+    }
+
+    await navigator.clipboard.writeText(text);
+    showCopySuccess();
+  } catch (error) {
+    showCopyFallback(text);
+  }
 }
 
 function toNumber(value) {
@@ -100,13 +285,17 @@ function updateTotals() {
   vatRow.hidden = vat === 0;
 }
 
-function addPosition(shouldFocus = false) {
+function addPosition(shouldFocus = false, shouldSave = true) {
   const fragment = positionTemplate.content.cloneNode(true);
   const row = fragment.querySelector("tr");
   positionsBody.append(fragment);
 
   if (shouldFocus) {
     row.querySelector(".item-name").focus();
+  }
+
+  if (shouldSave) {
+    saveDraft();
   }
 }
 
@@ -140,6 +329,7 @@ positionsBody.addEventListener("click", (event) => {
   }
 
   updateTotals();
+  saveDraft();
 });
 
 positionsBody.addEventListener("keydown", (event) => {
@@ -167,8 +357,15 @@ printEstimateButton.addEventListener("click", () => {
   window.print();
 });
 window.addEventListener("beforeprint", updatePrintHeading);
+copyWhatsAppButton.addEventListener("click", copyForWhatsApp);
+newEstimateButton.addEventListener("click", startNewEstimate);
+document.addEventListener("input", saveDraft);
+document.addEventListener("change", saveDraft);
 
 estimateDate.value = getLocalDate();
-addPosition();
+if (!restoreDraft()) {
+  addPosition(false, false);
+}
 updateTotals();
 updatePrintHeading();
+resizeComment();
