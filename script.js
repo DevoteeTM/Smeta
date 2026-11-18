@@ -25,8 +25,29 @@ const copyFallback = document.querySelector("#copy-fallback");
 const copyText = document.querySelector("#copy-text");
 const sender = document.querySelector("[name='sender']");
 const customer = document.querySelector("[name='customer']");
+const themeButtons = document.querySelectorAll(".theme-button");
 const draftStorageKey = "estimate-draft-v1";
+const themeStorageKey = "estimate-theme-v1";
 let copyStatusTimer;
+
+function applyTheme(theme, shouldSave = true) {
+  const selectedTheme = theme === "dark" ? "dark" : "light";
+  document.documentElement.dataset.theme = selectedTheme;
+
+  themeButtons.forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.themeValue === selectedTheme));
+  });
+
+  if (!shouldSave) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(themeStorageKey, selectedTheme);
+  } catch (error) {
+    // The theme still works when browser storage is unavailable.
+  }
+}
 
 function getLocalDate() {
   const today = new Date();
@@ -401,10 +422,14 @@ printEstimateButton.addEventListener("click", () => {
 window.addEventListener("beforeprint", updatePrintHeading);
 copyWhatsAppButton.addEventListener("click", copyForWhatsApp);
 newEstimateButton.addEventListener("click", startNewEstimate);
+themeButtons.forEach((button) => {
+  button.addEventListener("click", () => applyTheme(button.dataset.themeValue));
+});
 document.addEventListener("input", saveDraft);
 document.addEventListener("change", saveDraft);
 
 estimateDate.value = getLocalDate();
+applyTheme(document.documentElement.dataset.theme, false);
 if (!restoreDraft()) {
   addPosition(false, false);
 }

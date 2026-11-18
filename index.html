@@ -4,10 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Смета за 5 минут</title>
+    <script>
+      try {
+        const savedTheme = localStorage.getItem("estimate-theme-v1");
+        document.documentElement.dataset.theme = savedTheme === "dark" ? "dark" : "light";
+      } catch (error) {
+        document.documentElement.dataset.theme = "light";
+      }
+    </script>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <main class="page-shell">
+      <div class="theme-switcher" role="group" aria-label="Тема интерфейса">
+        <button class="theme-button" type="button" data-theme-value="light" aria-label="Светлая тема" title="Light Mode">
+          <span aria-hidden="true">&#9728;&#65039;</span>
+        </button>
+        <button class="theme-button" type="button" data-theme-value="dark" aria-label="Тёмная тема" title="Dark Mode">
+          <span aria-hidden="true">&#127769;</span>
+        </button>
+      </div>
       <header class="page-header">
         <h1>Смета за 5 минут</h1>
         <p>Заполните реквизиты и позиции — суммы рассчитаются автоматически.</p>
