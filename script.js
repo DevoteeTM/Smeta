@@ -13,6 +13,11 @@ const discountedRow = document.querySelector("#discounted-row");
 const discountedTotal = document.querySelector("#discounted-total");
 const vatRow = document.querySelector("#vat-row");
 const vatAmount = document.querySelector("#vat-amount");
+const estimateNumber = document.querySelector("[name='estimate-number']");
+const printEstimateNumber = document.querySelector("#print-estimate-number");
+const printEstimateDate = document.querySelector("#print-estimate-date");
+const comment = document.querySelector("#comment");
+const printEstimateButton = document.querySelector("#print-estimate");
 
 function getLocalDate() {
   const today = new Date();
@@ -20,6 +25,26 @@ function getLocalDate() {
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function formatDateForPrint(value) {
+  const parts = value.split("-");
+
+  if (parts.length !== 3) {
+    return value || "—";
+  }
+
+  return `${parts[2]}.${parts[1]}.${parts[0]}`;
+}
+
+function updatePrintHeading() {
+  printEstimateNumber.textContent = estimateNumber.value.trim() || "—";
+  printEstimateDate.textContent = formatDateForPrint(estimateDate.value);
+}
+
+function resizeComment() {
+  comment.style.height = "auto";
+  comment.style.height = `${comment.scrollHeight}px`;
 }
 
 function toNumber(value) {
@@ -134,7 +159,16 @@ addPositionButton.addEventListener("click", () => addPosition(true));
 discountRate.addEventListener("input", updateTotals);
 vatRate.addEventListener("input", updateTotals);
 currency.addEventListener("change", updateTotals);
+estimateNumber.addEventListener("input", updatePrintHeading);
+estimateDate.addEventListener("change", updatePrintHeading);
+comment.addEventListener("input", resizeComment);
+printEstimateButton.addEventListener("click", () => {
+  updatePrintHeading();
+  window.print();
+});
+window.addEventListener("beforeprint", updatePrintHeading);
 
 estimateDate.value = getLocalDate();
 addPosition();
 updateTotals();
+updatePrintHeading();

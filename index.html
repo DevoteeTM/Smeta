@@ -12,6 +12,7 @@
         <h1>Смета за 5 минут</h1>
         <p>Заполните реквизиты и позиции — суммы рассчитаются автоматически.</p>
       </header>
+      <h1 class="print-heading">Смета № <span id="print-estimate-number">—</span> от <span id="print-estimate-date"></span></h1>
 
       <section class="card" aria-labelledby="details-title">
         <h2 id="details-title">Реквизиты</h2>
@@ -98,6 +99,14 @@
           <strong id="grand-total">0 ₸</strong>
         </div>
       </section>
+
+      <section class="card comment-card" aria-labelledby="comment-title">
+        <h2 id="comment-title">Комментарий</h2>
+        <textarea id="comment" rows="4" placeholder="Сроки выполнения, условия оплаты и другие детали"></textarea>
+        <button id="print-estimate" class="print-button" type="button">Сохранить PDF</button>
+      </section>
+
+      <p class="signature">Подпись ____________________</p>
     </main>
 
     <template id="position-template">
