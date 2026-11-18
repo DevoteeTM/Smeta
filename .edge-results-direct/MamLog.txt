@@ -1,0 +1,54 @@
+[2026-11-18T14:50:08.679Z] [INFO] ========================================================================================================================
+[2026-11-18T14:50:08.679Z] [INFO] Initializing MAM Client.
+App: com.microsoft.edge 157.0.4341.60
+SDK: 2.4.2.0
+OS: windows 10.0.26300.9974
+DeviceType: Desktop
+Manufacturer: LENOVO
+Model: 21AJS04F00
+Telemetry: yes
+Managed device support: enabled
+[2026-11-18T14:50:08.681Z] [INFO] Telemetry session bc1982c7-ef09-486b-9952-407f61540891.
+[2026-11-18T14:50:08.681Z] [INFO] ECS client initialized.
+[2026-11-18T14:50:08.683Z] [INFO] Initializing cache (v1).
+[2026-11-18T14:50:08.688Z] [INFO] Flight configuration defaults:
+{"924da161-897f-4061-ad83-eca72d58a16e_0":{"source":0,"value":false},"DesktopMAM_Canary":{"source":0,"value":0},"f9fec151-8ff5-437c-a028-0e92e9878d8d_0":{"source":0,"value":false},"f9fec151-8ff5-437c-a028-0e92e9878d8d_1":{"source":0,"value":false}}
+[2026-11-18T14:50:08.688Z] [INFO] Registered Flight Client FlightClientId:6a1b553f-06f8-43f5-8e14-2f7a7e4c3a01 with new flight key e89a1587-03e9-4118-97af-0d28bcf5f927.
+[2026-11-18T14:50:08.710Z] [INFO] Started ECS service request processing.
+[2026-11-18T14:50:08.710Z] [INFO] Fetching flight data for flight key e89a1587-03e9-4118-97af-0d28bcf5f927...
+[2026-11-18T14:50:09.485Z] [INFO] Flight data fetch for flight key e89a1587-03e9-4118-97af-0d28bcf5f927 succeeded. (EcsCorrelationId:Ref A: 49298EB9EFE245B28ABAF32FC0ACF97F Ref B: FRA261110505062 Ref C: 2026-11-18T14:50:09Z)
+[2026-11-18T14:50:09.487Z] [INFO] Scheduling next ECS request for flight key e89a1587-03e9-4118-97af-0d28bcf5f927 at 2026-11-18T15:50:09.485Z.
+[2026-11-18T14:50:09.488Z] [INFO] Application flight configuration updated:
+{"924da161-897f-4061-ad83-eca72d58a16e_0":{"source":0,"value":false},"DesktopMAM_Canary":{"source":1,"value":1},"f9fec151-8ff5-437c-a028-0e92e9878d8d_0":{"source":0,"value":false},"f9fec151-8ff5-437c-a028-0e92e9878d8d_1":{"source":0,"value":false}}
+[2026-11-18T14:50:10.286Z] [INFO] Shutting down.
+[2026-11-18T14:50:10.287Z] [INFO] Stopping ECS service request processing and discarding any remaining scheduled requests...
+[2026-11-18T14:50:10.287Z] [INFO] Stopped ECS service request processing.
+[2026-11-18T14:50:10.288Z] [INFO] Stopping the task scheduler and canceling any outstanding work items...
+[2026-11-18T14:50:10.288Z] [INFO] Task scheduler has stopped, and all work has been canceled.
+[2026-11-18T14:51:39.344Z] [INFO] ========================================================================================================================
+[2026-11-18T14:51:39.345Z] [INFO] Initializing MAM Client.
+App: com.microsoft.edge 157.0.4341.60
+SDK: 2.4.2.0
+OS: windows 10.0.26300.9974
+DeviceType: Desktop
+Manufacturer: LENOVO
+Model: 21AJS04F00
+Telemetry: yes
+Managed device support: enabled
+[2026-11-18T14:51:39.345Z] [INFO] Telemetry session 2605a4f7-85b4-49c2-a163-ac81ad51e581.
+[2026-11-18T14:51:39.345Z] [INFO] ECS client initialized.
+[2026-11-18T14:51:39.346Z] [INFO] Reinitialized cache (v1).
+[2026-11-18T14:51:39.352Z] [INFO] Started ECS service request processing.
+[2026-11-18T14:51:39.371Z] [INFO] Flight configuration defaults:
+{"924da161-897f-4061-ad83-eca72d58a16e_0":{"source":0,"value":false},"DesktopMAM_Canary":{"source":0,"value":0},"f9fec151-8ff5-437c-a028-0e92e9878d8d_0":{"source":0,"value":false},"f9fec151-8ff5-437c-a028-0e92e9878d8d_1":{"source":0,"value":false}}
+[2026-11-18T14:51:39.371Z] [INFO] Registered Flight Client FlightClientId:6a1b553f-06f8-43f5-8e14-2f7a7e4c3a01 with new flight key e5ac07a4-f6d0-4538-9452-3cb82f0f960a.
+[2026-11-18T14:51:39.371Z] [INFO] Fetching flight data for flight key e5ac07a4-f6d0-4538-9452-3cb82f0f960a...
+[2026-11-18T14:51:40.973Z] [INFO] Flight data fetch for flight key e5ac07a4-f6d0-4538-9452-3cb82f0f960a succeeded. (EcsCorrelationId:Ref A: 12B545941FB44890866270A99EC9A459 Ref B: FRA261110501054 Ref C: 2026-11-18T14:51:40Z)
+[2026-11-18T14:51:40.974Z] [INFO] Scheduling next ECS request for flight key e5ac07a4-f6d0-4538-9452-3cb82f0f960a at 2026-11-18T15:51:40.973Z.
+[2026-11-18T14:51:40.974Z] [INFO] Application flight configuration updated:
+{"924da161-897f-4061-ad83-eca72d58a16e_0":{"source":0,"value":false},"DesktopMAM_Canary":{"source":1,"value":1},"f9fec151-8ff5-437c-a028-0e92e9878d8d_0":{"source":0,"value":false},"f9fec151-8ff5-437c-a028-0e92e9878d8d_1":{"source":0,"value":false}}
+[2026-11-18T14:51:41.922Z] [INFO] Shutting down.
+[2026-11-18T14:51:41.922Z] [INFO] Stopping ECS service request processing and discarding any remaining scheduled requests...
+[2026-11-18T14:51:41.922Z] [INFO] Stopped ECS service request processing.
+[2026-11-18T14:51:41.923Z] [INFO] Stopping the task scheduler and canceling any outstanding work items...
+[2026-11-18T14:51:41.923Z] [INFO] Task scheduler has stopped, and all work has been canceled.

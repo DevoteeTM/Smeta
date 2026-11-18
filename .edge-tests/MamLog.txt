@@ -1,0 +1,27 @@
+[2026-11-18T14:48:24.821Z] [INFO] ========================================================================================================================
+[2026-11-18T14:48:24.822Z] [INFO] Initializing MAM Client.
+App: com.microsoft.edge 157.0.4341.60
+SDK: 2.4.2.0
+OS: windows 10.0.26300.9974
+DeviceType: Desktop
+Manufacturer: LENOVO
+Model: 21AJS04F00
+Telemetry: yes
+Managed device support: enabled
+[2026-11-18T14:48:24.823Z] [INFO] Telemetry session 6ec68142-dfeb-4209-b8a9-9efc9815703d.
+[2026-11-18T14:48:24.823Z] [INFO] ECS client initialized.
+[2026-11-18T14:48:24.824Z] [INFO] Started ECS service request processing.
+[2026-11-18T14:48:24.836Z] [INFO] Initializing cache (v1).
+[2026-11-18T14:48:24.848Z] [INFO] Flight configuration defaults:
+{"924da161-897f-4061-ad83-eca72d58a16e_0":{"source":0,"value":false},"DesktopMAM_Canary":{"source":0,"value":0},"f9fec151-8ff5-437c-a028-0e92e9878d8d_0":{"source":0,"value":false},"f9fec151-8ff5-437c-a028-0e92e9878d8d_1":{"source":0,"value":false}}
+[2026-11-18T14:48:24.848Z] [INFO] Registered Flight Client FlightClientId:6a1b553f-06f8-43f5-8e14-2f7a7e4c3a01 with new flight key 0d341acf-a490-46f7-8cfd-2bc419736056.
+[2026-11-18T14:48:24.849Z] [INFO] Fetching flight data for flight key 0d341acf-a490-46f7-8cfd-2bc419736056...
+[2026-11-18T14:48:25.570Z] [INFO] Flight data fetch for flight key 0d341acf-a490-46f7-8cfd-2bc419736056 succeeded. (EcsCorrelationId:MIRA: ecbde3ab-3c29-d1a9-c744-4cfc6c6d5e6a FR3P281CA0033 2026-11-18T14:48:25.483Z)
+[2026-11-18T14:48:25.570Z] [INFO] Scheduling next ECS request for flight key 0d341acf-a490-46f7-8cfd-2bc419736056 at 2026-11-18T15:48:25.570Z.
+[2026-11-18T14:48:25.570Z] [INFO] Application flight configuration updated:
+{"924da161-897f-4061-ad83-eca72d58a16e_0":{"source":0,"value":false},"DesktopMAM_Canary":{"source":1,"value":1},"f9fec151-8ff5-437c-a028-0e92e9878d8d_0":{"source":0,"value":false},"f9fec151-8ff5-437c-a028-0e92e9878d8d_1":{"source":0,"value":false}}
+[2026-11-18T14:48:27.718Z] [INFO] Shutting down.
+[2026-11-18T14:48:27.719Z] [INFO] Stopping ECS service request processing and discarding any remaining scheduled requests...
+[2026-11-18T14:48:27.719Z] [INFO] Stopped ECS service request processing.
+[2026-11-18T14:48:27.723Z] [INFO] Stopping the task scheduler and canceling any outstanding work items...
+[2026-11-18T14:48:27.723Z] [INFO] Task scheduler has stopped, and all work has been canceled.
